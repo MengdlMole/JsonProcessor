@@ -1,0 +1,877 @@
+tools:
+  - id: json_pretty
+    name: JSON 格式化缩进
+    kind: script
+    processor: json_pretty
+    version: "1"
+    description: 只调整 JSON 结构缩进，不修改字符串值，也不转换 Unicode 表示。
+    tags: [JSON, 排版, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [pretty]
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_compact
+    name: JSON 压缩为单行
+    kind: script
+    processor: json_compact
+    version: "1"
+    description: 只移除 JSON 结构外的排版空白，不修改字符串值。
+    tags: [JSON, 排版, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [compact]
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_show_unicode
+    name: JSON 显示 Unicode 字符
+    kind: script
+    processor: json_show_unicode
+    version: "1"
+    description: 只将 JSON 字符串中的 Unicode 转义显示为字符，保留外部排版。
+    tags: [JSON, 编码, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [show_unicode]
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_escape_unicode
+    name: JSON 转义 Unicode 字符
+    kind: script
+    processor: json_escape_unicode
+    version: "1"
+    description: 只将 JSON 字符串中的非 ASCII 字符转换为 Unicode 转义，保留外部排版。
+    tags: [JSON, 编码, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [escape_unicode]
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_unwrap_one_layer
+    name: JSON 字符串解码一层
+    kind: script
+    processor: json_unwrap_one_layer
+    version: "1"
+    description: 只对由双引号包裹的 JSON 字符串执行一次解码，不继续递归处理。
+    tags: [JSON, 转义, 解码]
+    inputs:
+      - id: source_text
+        label: 被编码的 JSON 字符串
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴被双引号包裹的 JSON 字符串
+        content_type: text
+        placeholder: '例如 "{\\"id\\":1}"'
+    parameters: []
+    outputs: [{id: result, label: 文本结果, content_type: text}]
+
+  - id: text_remove_backslashes
+    name: 文本删除所有反斜杠
+    kind: script
+    processor: text_remove_backslashes
+    version: "1"
+    description: 只删除文本中的所有反斜杠（\\）；可能改变路径、正则表达式和转义字符含义。
+    tags: [文本, 反斜杠, 清理]
+    inputs:
+      - id: source_text
+        label: JSON 或普通文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴需要删除反斜杠的文本
+        content_type: text
+        placeholder: '例如 {\\"id\\":1}'
+    parameters: []
+    outputs: [{id: result, label: 文本结果, content_type: text}]
+
+  - id: json_remove_newlines
+    name: JSON 字符串移除换行符
+    kind: script
+    processor: json_remove_newlines
+    version: "1"
+    description: 只移除 JSON 字符串值中的换行符（\\n），不处理回车或制表符。
+    tags: [JSON, 清理, 换行符]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [remove_newlines]
+        placeholder: |-
+          例如 {"message":"第一行\\n第二行"}
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_remove_spaces
+    name: JSON 字符串移除 ASCII 空格
+    kind: script
+    processor: json_remove_spaces
+    version: "1"
+    description: 只移除 JSON 字符串值中的 ASCII 空格，不处理换行、回车或制表符。
+    tags: [JSON, 清理, 空格, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [remove_spaces]
+        placeholder: |-
+          例如 {"message":"字段 一"}
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_remove_carriage_returns
+    name: JSON 字符串移除回车符
+    kind: script
+    processor: json_remove_carriage_returns
+    version: "1"
+    description: 只移除 JSON 字符串值中的回车符（\\r），不处理换行或制表符。
+    tags: [JSON, 清理, 回车符]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [remove_carriage_returns]
+        placeholder: |-
+          例如 {"message":"第一段\\r第二段"}
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_remove_tabs
+    name: JSON 字符串移除制表符
+    kind: script
+    processor: json_remove_tabs
+    version: "1"
+    description: 只移除 JSON 字符串值中的制表符（\\t），不处理换行或回车符。
+    tags: [JSON, 清理, 制表符]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 粘贴 JSON 文本
+        content_type: json
+        editor_actions: [remove_tabs]
+        placeholder: |-
+          例如 {"message":"字段一\\t字段二"}
+    parameters: []
+    outputs: [{id: result, label: JSON 结果, content_type: json}]
+
+  - id: json_select_values
+    name: JSON 按路径选择值
+    kind: script
+    processor: json_select_values
+    version: "1"
+    description: 只按字段路径选择值，并输出 JSON 数组。
+    tags: [JSON, 提取, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        content_type: json
+    parameters:
+      - id: field_path
+        label: 字段路径
+        type: text
+        default: data.items[*].id
+        help: 例如 data.items[*].id。
+    outputs:
+      - id: result
+        label: 选中的值
+        content_type: json_array
+
+  - id: text_lines_to_json_array
+    name: 文本按行拆分为 JSON 数组
+    kind: script
+    processor: text_lines_to_json_array
+    version: "1"
+    description: 只按换行边界拆分文本；不修剪、不去空行、不去重。
+    tags: [TXT, JSON, 拆分, 原子操作]
+    inputs:
+      - id: source_text
+        label: 逐行文本
+        accept: [txt]
+        allow_paste: true
+        content_type: text
+    parameters: []
+    outputs:
+      - id: result
+        label: 行数组
+        content_type: json_array
+
+  - id: json_trim_string_values
+    name: JSON 数组字符串修剪首尾空白
+    kind: script
+    processor: json_trim_string_values
+    version: "1"
+    description: 只修剪数组中字符串元素的首尾空白，不删除元素。
+    tags: [JSON, 修剪, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 数组
+        accept: [json]
+        content_type: json_array
+    parameters: []
+    outputs:
+      - id: result
+        label: 修剪后的数组
+        content_type: json_array
+
+  - id: json_filter_empty_values
+    name: JSON 数组过滤空值
+    kind: script
+    processor: json_filter_empty_values
+    version: "1"
+    description: 只删除数组中的 null 和空字符串，不执行修剪或去重。
+    tags: [JSON, 过滤, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 数组
+        accept: [json]
+        content_type: json_array
+    parameters: []
+    outputs:
+      - id: result
+        label: 非空值数组
+        content_type: json_array
+
+  - id: json_deduplicate_values
+    name: JSON 数组去重
+    kind: script
+    processor: json_deduplicate_values
+    version: "1"
+    description: 只按首次出现顺序去除重复数组元素。
+    tags: [JSON, 去重, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 数组
+        accept: [json]
+        content_type: json_array
+    parameters: []
+    outputs:
+      - id: result
+        label: 唯一值数组
+        content_type: json_array
+
+  - id: json_values_to_lines
+    name: JSON 数组写为逐行文本
+    kind: script
+    processor: json_values_to_lines
+    version: "1"
+    description: 只把数组元素序列化为逐行 TXT。
+    tags: [JSON, TXT, 写出, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 数组
+        accept: [json]
+        content_type: json_array
+    parameters: []
+    outputs:
+      - id: result
+        label: 逐行文本
+        content_type: text
+
+  - id: json_values_to_quoted_list
+    name: JSON 数组写为引号逗号列表
+    kind: script
+    processor: json_values_to_quoted_list
+    version: "1"
+    description: 只把数组元素序列化为带引号的逗号分隔文本。
+    tags: [JSON, TXT, 写出, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 数组
+        accept: [json]
+        content_type: json_array
+    parameters: []
+    outputs:
+      - id: result
+        label: 引号逗号列表
+        content_type: text
+
+  - id: json_render_template_rows
+    name: JSON 数组按模板渲染为行记录
+    kind: script
+    processor: json_render_template_rows
+    version: "1"
+    description: 对每个数组元素渲染一次 Jinja2 JSON 模板，输出 JSON 行记录。
+    tags: [JSON, 模板, 原子操作]
+    inputs:
+      - id: source_json
+        label: 值数组
+        accept: [json]
+        content_type: json_array
+    parameters:
+      - id: id_variable
+        label: 模板中的值变量名
+        type: text
+        default: id
+      - id: common_params
+        label: 公共参数
+        type: textarea
+        default: '{}'
+      - id: json_template
+        label: JSON 模板
+        type: textarea
+        default: '{"id": {{ id | tojson }}}'
+      - id: column_name
+        label: JSON 字符串字段名
+        type: text
+        default: json_body
+    outputs:
+      - id: result
+        label: 渲染后的行记录
+        content_type: json_array
+
+  - id: json_map_records
+    name: JSON 记录数组映射列
+    kind: script
+    processor: json_map_records
+    version: "1"
+    description: 只根据列映射生成新的 JSON 行记录，不写入文件格式。
+    tags: [JSON, 映射, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 记录数组
+        accept: [json]
+        content_type: json_array
+    parameters:
+      - id: column_mapping
+        label: 列映射
+        type: textarea
+        default: |-
+          {
+            "ID": "id",
+            "名称": "name"
+          }
+    outputs:
+      - id: result
+        label: 映射后的行记录
+        content_type: json_array
+
+  - id: json_rows_to_xlsx
+    name: JSON 行记录写入 XLSX
+    kind: script
+    processor: json_rows_to_xlsx
+    version: "1"
+    description: 只把 JSON 对象数组写入新的 XLSX 文件。
+    tags: [JSON, XLSX, 写出, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 行记录
+        accept: [json]
+        content_type: json_array
+    parameters:
+      - id: sheet_name
+        label: 工作表名称
+        type: text
+        default: Data
+    outputs:
+      - id: result
+        label: XLSX 文件
+        content_type: xlsx
+
+  - id: json_rows_fill_template_xlsx
+    name: JSON 行记录填充 XLSX 模板
+    kind: script
+    processor: json_rows_fill_template_xlsx
+    version: "1"
+    description: 只把已生成的 JSON 行记录写入现有 XLSX 模板的指定列。
+    tags: [JSON, XLSX, 模板, 原子操作]
+    inputs:
+      - id: source_json
+        label: JSON 行记录
+        accept: [json]
+        content_type: json_array
+      - id: template_xlsx
+        label: Excel 模板文件
+        accept: [xlsx]
+        content_type: xlsx
+        inspector: xlsx
+    parameters:
+      - id: id_field
+        label: 行记录中的 ID 字段
+        type: text
+        default: id
+      - id: value_field
+        label: 行记录中的内容字段
+        type: text
+        default: json_body
+      - id: sheet_name
+        label: 工作表名称（留空使用当前表）
+        type: text
+        default: ""
+        required: false
+        ui_control: workbook_sheet
+        source_input: template_xlsx
+      - id: header_row
+        label: 标题行
+        type: integer
+        default: 1
+        minimum: 1
+      - id: start_row
+        label: 数据起始行
+        type: integer
+        default: 2
+        minimum: 1
+      - id: id_column
+        label: ID 列（留空不写 ID）
+        type: text
+        default: A
+        required: false
+        ui_control: workbook_column
+        source_input: template_xlsx
+        sheet_parameter: sheet_name
+        header_row_parameter: header_row
+      - id: target_column
+        label: 内容目标列
+        type: text
+        default: B
+        ui_control: workbook_column
+        source_input: template_xlsx
+        sheet_parameter: sheet_name
+        header_row_parameter: header_row
+    outputs:
+      - id: result
+        label: 已填充的 XLSX
+        content_type: xlsx
+
+  - id: json_ids_to_json_xlsx
+    name: JSON 提取 ID → 模板 JSON → XLSX
+    kind: workflow
+    version: "1"
+    description: 从 JSON 选择 ID，经空值过滤和去重后渲染模板并写入 Excel。
+    tags: [工作流, JSON, XLSX]
+    inputs:
+      - id: source_json
+        label: JSON 文件
+        accept: [json, txt]
+        allow_paste: true
+        paste_label: 或直接粘贴 JSON
+        content_type: json
+    parameters:
+      - id: field_path
+        label: ID 字段路径
+        type: text
+        default: data.items[*].id
+      - id: id_variable
+        label: 模板中的 ID 变量名
+        type: text
+        default: id
+      - id: common_params
+        label: 公共参数
+        type: textarea
+        default: |-
+          {
+            "source": "workflow"
+          }
+      - id: json_template
+        label: JSON 模板
+        type: textarea
+        default: |-
+          {
+            "id": {{ id | tojson }},
+            "source": {{ source | tojson }}
+          }
+      - id: column_name
+        label: JSON 所在列名
+        type: text
+        default: json_body
+      - id: sheet_name
+        label: 工作表名称
+        type: text
+        default: Data
+    steps:
+      - id: extract
+        uses: json_select_values
+        inputs:
+          source_json: ${inputs.source_json}
+        params:
+          field_path: ${params.field_path}
+      - id: filter_empty
+        uses: json_filter_empty_values
+        inputs:
+          source_json: ${steps.extract.outputs.result}
+        params: {}
+      - id: deduplicate
+        uses: json_deduplicate_values
+        inputs:
+          source_json: ${steps.filter_empty.outputs.result}
+        params: {}
+      - id: render
+        uses: json_render_template_rows
+        inputs:
+          source_json: ${steps.deduplicate.outputs.result}
+        params:
+          id_variable: ${params.id_variable}
+          common_params: ${params.common_params}
+          json_template: ${params.json_template}
+          column_name: ${params.column_name}
+      - id: write_xlsx
+        uses: json_rows_to_xlsx
+        inputs:
+          source_json: ${steps.render.outputs.result}
+        params:
+          sheet_name: ${params.sheet_name}
+    outputs:
+      - id: result
+        label: XLSX 文件
+        content_type: xlsx
+
+  - id: txt_ids_to_json_xlsx_workflow
+    name: TXT ID → 模板 JSON → XLSX
+    kind: workflow
+    version: "1"
+    description: 将逐行文本依次拆分、修剪、过滤、去重、模板渲染并写入 XLSX。
+    tags: [工作流, TXT, JSON, XLSX]
+    inputs:
+      - id: source_text
+        label: ID 文本文件
+        accept: [txt]
+        allow_paste: true
+        content_type: text
+    parameters:
+      - id: id_variable
+        label: 模板中的 ID 变量名
+        type: text
+        default: id
+      - id: common_params
+        label: 公共参数
+        type: textarea
+        default: '{"source":"workflow"}'
+      - id: json_template
+        label: JSON 模板
+        type: textarea
+        default: '{"id": {{ id | tojson }}, "source": {{ source | tojson }}}'
+      - id: column_name
+        label: JSON 所在列名
+        type: text
+        default: json_body
+      - id: sheet_name
+        label: 工作表名称
+        type: text
+        default: Data
+    steps:
+      - id: split
+        uses: text_lines_to_json_array
+        inputs:
+          source_text: ${inputs.source_text}
+        params: {}
+      - id: trim
+        uses: json_trim_string_values
+        inputs:
+          source_json: ${steps.split.outputs.result}
+        params: {}
+      - id: filter_empty
+        uses: json_filter_empty_values
+        inputs:
+          source_json: ${steps.trim.outputs.result}
+        params: {}
+      - id: deduplicate
+        uses: json_deduplicate_values
+        inputs:
+          source_json: ${steps.filter_empty.outputs.result}
+        params: {}
+      - id: render
+        uses: json_render_template_rows
+        inputs:
+          source_json: ${steps.deduplicate.outputs.result}
+        params:
+          id_variable: ${params.id_variable}
+          common_params: ${params.common_params}
+          json_template: ${params.json_template}
+          column_name: ${params.column_name}
+      - id: write_xlsx
+        uses: json_rows_to_xlsx
+        inputs:
+          source_json: ${steps.render.outputs.result}
+        params:
+          sheet_name: ${params.sheet_name}
+    outputs:
+      - id: result
+        label: XLSX 文件
+        content_type: xlsx
+
+  - id: txt_ids_fill_template_workflow
+    name: TXT ID → 模板 JSON → 填充 XLSX 模板
+    kind: workflow
+    version: "1"
+    description: 将逐行 ID 原子化处理并渲染 JSON，最后填入现有 Excel 模板。
+    tags: [工作流, TXT, JSON, XLSX, 模板]
+    inputs:
+      - id: source_text
+        label: ID 文本文件
+        accept: [txt]
+        allow_paste: true
+        content_type: text
+      - id: template_xlsx
+        label: Excel 模板文件
+        accept: [xlsx]
+        content_type: xlsx
+        inspector: xlsx
+    parameters:
+      - id: id_variable
+        label: 模板中的 ID 变量名
+        type: text
+        default: id
+      - id: common_params
+        label: 公共参数
+        type: textarea
+        default: '{}'
+      - id: json_template
+        label: JSON 模板
+        type: textarea
+        default: '{"id": {{ id | tojson }}}'
+      - id: column_name
+        label: JSON 所在字段名
+        type: text
+        default: json_body
+      - id: sheet_name
+        label: 工作表名称（留空使用当前表）
+        type: text
+        default: ""
+        required: false
+        ui_control: workbook_sheet
+        source_input: template_xlsx
+      - id: header_row
+        label: 标题行
+        type: integer
+        default: 1
+        minimum: 1
+      - id: start_row
+        label: 数据起始行
+        type: integer
+        default: 2
+        minimum: 1
+      - id: id_column
+        label: ID 列（留空不写 ID）
+        type: text
+        default: A
+        required: false
+        ui_control: workbook_column
+        source_input: template_xlsx
+        sheet_parameter: sheet_name
+        header_row_parameter: header_row
+      - id: target_column
+        label: JSON 目标列
+        type: text
+        default: B
+        ui_control: workbook_column
+        source_input: template_xlsx
+        sheet_parameter: sheet_name
+        header_row_parameter: header_row
+    steps:
+      - id: split
+        uses: text_lines_to_json_array
+        inputs:
+          source_text: ${inputs.source_text}
+        params: {}
+      - id: trim
+        uses: json_trim_string_values
+        inputs:
+          source_json: ${steps.split.outputs.result}
+        params: {}
+      - id: filter_empty
+        uses: json_filter_empty_values
+        inputs:
+          source_json: ${steps.trim.outputs.result}
+        params: {}
+      - id: deduplicate
+        uses: json_deduplicate_values
+        inputs:
+          source_json: ${steps.filter_empty.outputs.result}
+        params: {}
+      - id: render
+        uses: json_render_template_rows
+        inputs:
+          source_json: ${steps.deduplicate.outputs.result}
+        params:
+          id_variable: ${params.id_variable}
+          common_params: ${params.common_params}
+          json_template: ${params.json_template}
+          column_name: ${params.column_name}
+      - id: fill
+        uses: json_rows_fill_template_xlsx
+        inputs:
+          source_json: ${steps.render.outputs.result}
+          template_xlsx: ${inputs.template_xlsx}
+        params:
+          id_field: id
+          value_field: ${params.column_name}
+          sheet_name: ${params.sheet_name}
+          header_row: ${params.header_row}
+          start_row: ${params.start_row}
+          id_column: ${params.id_column}
+          target_column: ${params.target_column}
+    outputs:
+      - id: result
+        label: 已填充的 XLSX
+        content_type: xlsx
+
+  - id: json_extract_lines_workflow
+    name: JSON 提取字段 → 逐行 TXT
+    kind: workflow
+    version: "1"
+    description: 按路径选择值，过滤空值、去重后写为逐行文本。
+    tags: [工作流, JSON, TXT, 提取]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        content_type: json
+    parameters:
+      - id: field_path
+        label: 字段路径
+        type: text
+        default: data.items[*].id
+    steps:
+      - id: select
+        uses: json_select_values
+        inputs:
+          source_json: ${inputs.source_json}
+        params:
+          field_path: ${params.field_path}
+      - id: filter_empty
+        uses: json_filter_empty_values
+        inputs:
+          source_json: ${steps.select.outputs.result}
+        params: {}
+      - id: deduplicate
+        uses: json_deduplicate_values
+        inputs:
+          source_json: ${steps.filter_empty.outputs.result}
+        params: {}
+      - id: write
+        uses: json_values_to_lines
+        inputs:
+          source_json: ${steps.deduplicate.outputs.result}
+        params: {}
+    outputs:
+      - id: result
+        label: 逐行 TXT
+        content_type: text
+
+  - id: json_extract_quoted_list_workflow
+    name: JSON 提取字段 → 引号逗号列表
+    kind: workflow
+    version: "1"
+    description: 按路径选择值，过滤空值、去重后写为引号包围的逗号列表。
+    tags: [工作流, JSON, TXT, 提取]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        content_type: json
+    parameters:
+      - id: field_path
+        label: 字段路径
+        type: text
+        default: data.items[*].id
+    steps:
+      - id: select
+        uses: json_select_values
+        inputs:
+          source_json: ${inputs.source_json}
+        params:
+          field_path: ${params.field_path}
+      - id: filter_empty
+        uses: json_filter_empty_values
+        inputs:
+          source_json: ${steps.select.outputs.result}
+        params: {}
+      - id: deduplicate
+        uses: json_deduplicate_values
+        inputs:
+          source_json: ${steps.filter_empty.outputs.result}
+        params: {}
+      - id: write
+        uses: json_values_to_quoted_list
+        inputs:
+          source_json: ${steps.deduplicate.outputs.result}
+        params: {}
+    outputs:
+      - id: result
+        label: 引号逗号列表
+        content_type: text
+
+  - id: json_records_to_xlsx_workflow
+    name: JSON 记录数组 → 列映射 → XLSX
+    kind: workflow
+    version: "1"
+    description: 选择 JSON 记录数组，映射列后写入新的 XLSX 文件。
+    tags: [工作流, JSON, XLSX, 映射]
+    inputs:
+      - id: source_json
+        label: JSON 文件或文本
+        accept: [json, txt]
+        allow_paste: true
+        content_type: json
+    parameters:
+      - id: record_path
+        label: 记录数组路径
+        type: text
+        default: data.items[*]
+      - id: column_mapping
+        label: 列映射
+        type: textarea
+        default: '{"ID":"id","名称":"name"}'
+      - id: sheet_name
+        label: 工作表名称
+        type: text
+        default: Data
+    steps:
+      - id: select
+        uses: json_select_values
+        inputs:
+          source_json: ${inputs.source_json}
+        params:
+          field_path: ${params.record_path}
+      - id: map
+        uses: json_map_records
+        inputs:
+          source_json: ${steps.select.outputs.result}
+        params:
+          column_mapping: ${params.column_mapping}
+      - id: write
+        uses: json_rows_to_xlsx
+        inputs:
+          source_json: ${steps.map.outputs.result}
+        params:
+          sheet_name: ${params.sheet_name}
+    outputs:
+      - id: result
+        label: XLSX 文件
+        content_type: xlsx
