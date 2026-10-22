@@ -973,5 +973,5 @@ pages = {
 navigation = st.navigation(pages)
 with st.sidebar:
     st.markdown("### JsonProcessor")
-    st.caption("Local processing workbench · v0.5.0")
+    st.caption("Local processing workbench · v1.0.0")
 navigation.run()

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+data/workbench.db
+data/workbench.db-*
+data/presets.json
+data/runs/*
+!data/runs/.gitkeep
